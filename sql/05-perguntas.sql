@@ -75,7 +75,16 @@ ORDER BY canal_pedido, houve_desconto;
 --  praca - isso esta certo. Multiplique por b.fator_publico para o faturamento
 --  nao ser contado duas vezes.
 
--- >>> ESCREVA AQUI a consulta da P4
+SELECT
+    dp.nome_praca,
+    dp.domicilios_com_pet,
+    ROUND(SUM(f.vl_liquido * b.fator_publico), 2) AS faturamento_rateado
+FROM fato_pedido f
+JOIN dim_loja l ON l.sk_loja = f.sk_loja
+JOIN bridge_loja_praca b ON b.cod_loja = l.cod_loja
+JOIN dim_praca dp ON dp.sk_praca = b.sk_praca
+GROUP BY dp.nome_praca, dp.domicilios_com_pet
+ORDER BY faturamento_rateado DESC;
 
 
 -- =====================================================================================

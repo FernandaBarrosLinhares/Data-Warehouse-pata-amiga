@@ -66,7 +66,7 @@ Médias e Grandes. O gargalo não está na etapa final de entrega em si
 tempo entre faturar e despachar, e esse problema é especialmente grave nas
 lojas menores.
 
-![Resultado da P1 - gargalo da entrega por porte de loja](assets/pergunta01.jpg)
+![Resultado da P1 - gargalo da entrega por porte de loja](assets/pergunta01.png)
 
 ### P2 — Qual categoria concentra o faturamento?
 
@@ -102,6 +102,22 @@ igualmente possível que pedidos maiores (que já tendem a ter ticket mais alto)
 sejam justamente os que mais recebem desconto, por política comercial.
 
 ![Resultado da P3 - ticket médio com e sem desconto por canal](assets/pergunta03.png)
+
+### P4 — Qual praça de atendimento concentra o faturamento?
+
+**Vale do Itajaí** concentra o maior faturamento rateado da rede, com
+**R$ 633.746,09** — mais que o dobro da segunda colocada (Grande Florianópolis,
+R$ 283.546,75). E essa concentração não é só porque a praça é grande: cruzando
+com o número de domicílios com pet, Vale do Itajaí fatura **R$ 4,28 por
+domicílio**, quase o dobro da segunda melhor relação (Litoral Sul, R$ 2,36) —
+ou seja, a praça performa acima do que seu tamanho de mercado sugeriria.
+
+No outro extremo, **Foz do Itajaí** chama atenção pelo desempenho fraco: apesar
+de ter 74.000 domicílios com pet (mais que Litoral Sul ou Litoral Norte), fatura
+apenas R$ 46.749,72 — uma relação de **R$ 0,63 por domicílio**, a pior de toda
+a rede. É a praça com maior espaço de mercado não capturado.
+
+![Resultado da P4 - faturamento rateado por praça](assets/pergunta04.png)
 
 ## Diagrama do modelo
 
