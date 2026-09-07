@@ -99,4 +99,27 @@ ORDER BY faturamento_rateado DESC;
 --  (c) Meca o que ficou de fora: pedidos sem loja, entregas nao concluidas,
 --      itens e valores em branco.
 
--- >>> ESCREVA AQUI as consultas da P5
+SELECT
+    dl.nome_loja,
+    dl.populacao_cidade,
+    ROUND(SUM(f.qt_itens) / (dl.populacao_cidade / 1000), 2) AS itens_por_mil_habitantes,
+    ROUND(AVG(f.dias_total_ate_entrega), 2) AS tempo_medio_entrega
+FROM fato_pedido f
+JOIN dim_loja dl ON dl.sk_loja = f.sk_loja
+WHERE dl.sk_loja <> -1
+GROUP BY dl.nome_loja, dl.populacao_cidade
+ORDER BY itens_por_mil_habitantes DESC;
+
+SELECT
+    dl.faixa_franquia,
+    ROUND(SUM(f.vl_liquido), 2) AS faturamento
+FROM fato_pedido f
+JOIN dim_loja dl ON dl.sk_loja = f.sk_loja
+GROUP BY dl.faixa_franquia
+ORDER BY faturamento DESC;
+
+SELECT 'pedidos sem loja' AS medida, COUNT(*) AS valor FROM fato_pedido WHERE sk_loja = -1
+UNION ALL SELECT 'entregas nao concluidas', COUNT(*) FROM fato_pedido WHERE sk_tempo_entrega = -1
+UNION ALL SELECT 'itens em branco', COUNT(*) FROM fato_pedido WHERE qt_itens IS NULL
+UNION ALL SELECT 'valores em branco', COUNT(*) FROM fato_pedido WHERE vl_liquido IS NULL;
+

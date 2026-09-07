@@ -119,6 +119,65 @@ a rede. É a praça com maior espaço de mercado não capturado.
 
 ![Resultado da P4 - faturamento rateado por praça](assets/pergunta04.png)
 
+### P5 — Onde abrir a próxima loja, e o que os dados não permitem afirmar?
+
+**(a) Ranking por itens vendidos por mil habitantes**
+
+**Pata Amiga Rio dos Cedros** lidera o ranking com **41,87 itens por mil
+habitantes** — uma demanda proporcionalmente muito maior que a média da rede,
+apesar de ser uma cidade pequena (11.322 habitantes). O padrão se repete nas
+posições seguintes: a maioria das lojas no topo do ranking (Presidente Getúlio,
+Ibirama, Itapoa, Santo Amaro da Imperatriz) fica em cidades pequenas e médias,
+e justamente essas lojas têm os **piores tempos de entrega** (14 a 16 dias) —
+reforçando o achado da P1 de que lojas menores sofrem mais com o gargalo entre
+nota fiscal e despacho.
+
+A exceção interessante é **Timbó** (45.011 habitantes): tem alta demanda
+relativa (17,86 itens/mil hab.) e o **melhor tempo de entrega da rede** (7,70
+dias) — sugerindo que, quando a operação logística funciona bem, cidades
+maiores conseguem crescer sem penalizar o cliente.
+
+![Resultado da P5a - itens por mil habitantes e tempo de entrega](assets/pergunta05_a.png)
+
+**(b) Faturamento por faixa de franquia**
+
+Lojas na faixa **Ouro** concentram mais da metade do faturamento da rede.
+Porém, esse número usa o cadastro **atual** da loja (`faixa_franquia` em
+`dim_loja`), que é a foto de hoje. Como uma loja pode ter mudado de faixa ao
+longo dos 7 meses analisados, esse valor **não** responde "quanto do
+faturamento veio de pedidos feitos quando a loja já era Ouro" — ele soma todo
+o histórico de pedidos da loja na faixa em que ela está *agora*, mesmo que
+parte desses pedidos tenha ocorrido quando ela estava numa faixa inferior
+(o cadastro de lojas não guarda histórico, só o estado presente).
+
+![Resultado da P5b - itens por mil habitantes e tempo de entrega](assets/pergunta05_b.png)
+
+**(c) O que ficou de fora**
+
+- **3 pedidos** sem loja identificada (foram para a linha -1, não descartados)
+- **1.953 entregas** ainda não concluídas na data de extração dos dados (quase
+  metade da base — o tempo de entrega dessas é desconhecido, não zero)
+- **257 pedidos** com quantidade de itens em branco
+- **121 pedidos** com valor líquido em branco
+
+![Resultado da P5c - itens por mil habitantes e tempo de entrega](assets/pergunta05_c.png)
+
+**Recomendação final**
+
+Cidades pequenas e médias (10 a 25 mil habitantes) mostram a maior demanda
+reprimida por item vendido por habitante — são o perfil mais promissor para
+uma próxima loja. Mas essa recomendação vem com uma condição: a rede precisa
+resolver antes o gargalo logístico identificado na P1 (nota fiscal → despacho,
+que chega a 8,5 dias em lojas Pequenas), sob risco de repetir nessa nova loja
+os tempos de entrega de 14+ dias observados hoje nas cidades desse porte.
+
+O que os dados **não permitem afirmar**: (1) se o faturamento por faixa de
+franquia realmente reflete o desempenho de cada faixa ao longo do tempo, já
+que o cadastro só tem a foto de hoje; (2) qual será o tempo real de entrega
+das 1.953 entregas ainda em aberto — quase metade da base está incompleta
+nesse quesito; e (3) uma relação de causa entre desconto e ticket médio (P3) —
+apenas a correlação foi observada.
+
 ## Diagrama do modelo
 
 _[a preencher: imagem do modelo estrela]_
