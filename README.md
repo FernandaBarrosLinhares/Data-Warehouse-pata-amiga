@@ -252,7 +252,7 @@ apenas a correlação foi observada.
 
 ## Diagrama do modelo
 
-_[a preencher: imagem do modelo estrela]_
+![Modelo dimensional Pata Amiga](assets/modelo_dimensional_pata_amiga.png)
 
 ## Vídeo
 
