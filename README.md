@@ -68,6 +68,21 @@ lojas menores.
 
 ![Resultado da P1 - gargalo da entrega por porte de loja](assets/pergunta01.jpg)
 
+### P2 — Qual categoria concentra o faturamento?
+
+A categoria **Ração** concentra sozinha **60,01%** de todo o faturamento da
+rede — de longe a categoria mais relevante do negócio. As demais categorias
+somadas não chegam nem à metade disso: **Medicamento** vem em segundo lugar,
+com 17,06%, e as outras cinco categorias (Petisco, Serviço, Higiene, Acessório
+e Brinquedo) dividem os 22,93% restantes.
+
+
+
+Não apareceu faturamento na categoria "Nao Informado" — ou seja, todos os
+pedidos tiveram a categoria de produto identificada corretamente.
+
+![Resultado da P2 - faturamento por categoria](assets/pergunta02.png)
+
 ## Diagrama do modelo
 
 _[a preencher: imagem do modelo estrela]_
