@@ -83,6 +83,26 @@ pedidos tiveram a categoria de produto identificada corretamente.
 
 ![Resultado da P2 - faturamento por categoria](assets/pergunta02.png)
 
+### P3 — O desconto funciona igual em todo canal?
+
+O WhatsApp aparece corretamente na fato, com os 414 pedidos já confirmados na
+carga — confirmando que a ordem do CASE (WHATS antes de APP) foi aplicada
+certa.
+
+Em **todos os canais**, o ticket médio dos pedidos **com** desconto é
+consistentemente de 2,5 a 3 vezes maior do que o dos pedidos **sem**
+desconto — o padrão se repete de forma muito parecida em App, Loja Física,
+Site, Telefone e WhatsApp (todos na faixa de R$ 488 a R$ 514 com desconto,
+contra R$ 167 a R$ 206 sem desconto). Ou seja, a política de desconto **funciona
+de forma consistente entre os canais** — nenhum canal se destoa dos demais.
+
+Vale uma ressalva: esse dado mostra uma **correlação**, não necessariamente
+uma causa. Não dá pra afirmar que o desconto "faz" o cliente gastar mais — é
+igualmente possível que pedidos maiores (que já tendem a ter ticket mais alto)
+sejam justamente os que mais recebem desconto, por política comercial.
+
+![Resultado da P3 - ticket médio com e sem desconto por canal](assets/pergunta03.png)
+
 ## Diagrama do modelo
 
 _[a preencher: imagem do modelo estrela]_

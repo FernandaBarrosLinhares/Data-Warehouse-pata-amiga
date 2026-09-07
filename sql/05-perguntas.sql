@@ -56,7 +56,14 @@ ORDER BY faturamento DESC;
 --  Confira se o WhatsApp aparece - se nao, o CASE do arquivo 04 testou APP antes
 --  de WHATS.
 
--- >>> ESCREVA AQUI a consulta da P3
+SELECT
+    canal_pedido,
+    houve_desconto,
+    ROUND(AVG(vl_liquido), 2) AS ticket_medio,
+    COUNT(*) AS qtd_pedidos
+FROM fato_pedido
+GROUP BY canal_pedido, houve_desconto
+ORDER BY canal_pedido, houve_desconto;
 
 
 -- =====================================================================================
