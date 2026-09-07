@@ -52,7 +52,21 @@ _[a preencher: decisões sobre `fato_pedido`]_
 
 ## Tarefa 5 — Respostas de negócio
 
-_[a preencher: as cinco perguntas, cada uma com o número e a explicação]_
+### P1 — Onde está o gargalo do processo de entrega?
+
+O intervalo mais lento em **todos** os portes de loja é entre a nota fiscal e o
+despacho pela transportadora (`dias_nota_despacho`). Nas lojas de porte Médio
+e Grande, esse intervalo dura em média **3,3 dias** — já nas lojas Pequenas,
+dura **8,5 dias**, quase o triplo.
+
+Esse gargalo puxa o tempo total do processo (do ERP até a entrega ao cliente)
+para uma média de **15,2 dias** nas lojas Pequenas, contra **~7,9 dias** em
+Médias e Grandes. O gargalo não está na etapa final de entrega em si
+(`dias_despacho_entrega`, entre 2 e 2,9 dias em todos os portes) — está no
+tempo entre faturar e despachar, e esse problema é especialmente grave nas
+lojas menores.
+
+![Resultado da P1 - gargalo da entrega por porte de loja](assets/pergunta01.jpg)
 
 ## Diagrama do modelo
 
