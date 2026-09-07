@@ -40,16 +40,88 @@ Esses marcos em branco indicam pedidos com o processo de entrega ainda em aberto
 
 ## Tarefa 2 — Tratamento
 
-_[a preencher: máscara de data escolhida e por quê, de-para das categorias, padronização do nome da loja]_
+**Máscara de data.** A `DtHoraPedido` e a `DtHoraIntegracaoERP` vêm no formato
+americano, com hora e AM/PM (`09/01/2023 10:27 AM`). Usei
+`STR_TO_DATE(<coluna>, '%m/%d/%Y %h:%i %p')` para converter as duas. Testei
+isso *antes* de escrever a fato: comparando quantas datas a máscara americana
+conseguia ler (4.044 de 4.044) contra a máscara brasileira `%d/%m/%Y` — essa
+segunda não gera erro nenhum, mas embaralha silenciosamente dia e mês sempre
+que o dia é ≤ 12, o que teria produzido datas erradas sem nenhum aviso na
+tela. Os quatro marcos da entrega (`Dt Separacao Estoque`, `DtNotaFiscal`,
+`Dt_Despacho_Transportadora`, `DtEntregaCliente`) já vêm em ISO
+(`AAAA-MM-DD`), então bastou `DATE(<coluna>)`.
+
+**A regra dos números.** `vl_liquido` chega misturando `"R$ 1.850,00"`,
+`"1850.00"`, `"1.200"`, `"-"` e vazio na mesma coluna. Apliquei a expressão do
+enunciado: `''` e `'-'` viram `NULL` (nunca `0`, para não subestimar o
+faturamento), valores com vírgula têm o ponto de milhar removido e a vírgula
+trocada por ponto, e os demais só perdem o `"R$"` e os espaços antes do
+`CAST`. A mesma lógica de "vazio ou `-` vira `NULL`" precisou ser replicada
+em `qt_itens`, que também tinha algumas linhas com `'-'`.
+
+**De-para das categorias.** As 18 grafias de `CategoriaProduto` viram 7
+categorias padronizadas com um `CASE` cuja ordem segue estritamente a tabela
+do enunciado: `MED` antes de `RA`, porque "Ração Medicamentosa" contém "RA" e
+seria classificada errado como Ração se a ordem fosse invertida. Todo o teste
+é feito em `UPPER()`, e a grafia crua é preservada em `categoria_origem` na
+`dim_categoria` — é por ela que a fato encontra a linha, sem precisar repetir
+o `CASE` na carga da fato.
+
+**Padronização do nome da loja.** Feita em duas etapas, na ordem certa: (1)
+mecânica — `REPLACE` remove o sufixo `"/SC"` e o espaço duplo, e o texto é
+comparado em maiúsculas; (2) manual — um `CASE` resolve as 3 grafias que
+sobram depois da etapa 1 (um erro de digitação, um apelido e uma abreviação),
+comparando com a `chave_loja` da `dim_loja`. A padronização acontece **antes**
+do lookup — nunca depois — porque o `JOIN` só encontra a loja se o texto já
+estiver limpo.
 
 ## Tarefa 3 — Construção das dimensões
 
-_[a preencher: como `dim_categoria`, `dim_praca` e `bridge_loja_praca` foram montadas]_
+**`dim_categoria`** foi criada com um único `INSERT ... SELECT DISTINCT`
+sobre `stg_pedido`, aplicando o `CASE` de 7 categorias descrito na Tarefa 2 e
+gravando a grafia crua em `categoria_origem`. A linha -1 ("Nao Informado") foi
+inserida manualmente antes, para nenhuma FK da fato ficar nula.
+
+**`dim_praca`** teve que resolver um problema de granularidade: a
+`stg_loja_praca` tem 48 linhas (uma por combinação loja × praça), mas a
+dimensão precisa de uma linha por praça. Um `GROUP BY CodPraca` colapsou as 48
+linhas em 12 praças; como `NomePraca`, `Regional` e `DomiciliosComPet`
+repetem o mesmo valor dentro de cada praça, usei `MAX()` para trazê-los sem
+inventar nada. `DomiciliosComPet` também precisou de um `REPLACE` para tirar o
+ponto de milhar (`'148.000'` → `148000`) antes do `CAST`.
+
+**`bridge_loja_praca`** existe porque uma loja pode atender mais de uma
+praça — uma relação N:N que não cabe em nenhuma FK simples (nem na fato, nem
+na `dim_loja`). Ela liga pelo **código da loja** (não pela `sk_loja`), com o
+`fator_publico` de cada combinação. Conferi que os fatores de cada loja somam
+exatamente 1,00 — condição necessária para o rateio da P4 não estourar o
+faturamento total da rede.
 
 ## Tarefa 4 — Tabela fato
 
-_[a preencher: decisões sobre `fato_pedido`]_
+A `fato_pedido` foi construída com **um único** `INSERT ... SELECT`, sem
+nenhuma subconsulta, seguindo a regra de que a limpeza mora nas dimensões e a
+fato só *procura* a linha certa via `LEFT JOIN`. Nenhuma FK ficou nula:
+`sk_loja` e `sk_categoria` usam `COALESCE(..., -1)` quando o `LEFT JOIN` não
+encontra correspondência, e `sk_tempo_entrega` vale -1 nos 1.953 pedidos cuja
+entrega ainda não aconteceu.
 
+`houve_desconto` e `canal_pedido` não viram dimensão — são dois domínios de
+poucos valores, sem nada pendurado neles — e foram padronizados direto no
+`INSERT`, com atenção especial à ordem do `CASE` do canal: `'WHATSAPP'`
+contém `'APP'`, então testei `WHATS` antes de `APP` (confirmado pelos 414
+pedidos de WhatsApp aparecendo corretamente na fato).
+
+As cinco colunas de dias (`dias_integracao_separacao`,
+`dias_separacao_nota`, `dias_nota_despacho`, `dias_despacho_entrega` e
+`dias_total_ate_entrega`) foram calculadas uma única vez, com `DATEDIFF`.
+Sempre que o marco de fim de uma etapa veio em branco, gravei `NULL` — nunca
+`0` — porque `AVG()` ignora `NULL` mas soma o `0`, e um `0` no lugar de "ainda
+não aconteceu" faria o gargalo da P1 parecer mais rápido do que realmente é.
+
+Ao final, conferi que a fato tem exatamente 4.044 linhas, nenhuma FK nula ou
+órfã, nenhum dia negativo, e que o período dos pedidos vai de 01/09/2023 a
+31/03/2024 — tudo batendo com o esperado.
 ## Tarefa 5 — Respostas de negócio
 
 ### P1 — Onde está o gargalo do processo de entrega?
