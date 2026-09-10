@@ -1,0 +1,7 @@
+# ----- Credenciais (NUNCA versionar) -----
+.env
+
+# ----- Dados baixados/locais (NUNCA versionar) -----
+data/
+*.zip
+*.csv

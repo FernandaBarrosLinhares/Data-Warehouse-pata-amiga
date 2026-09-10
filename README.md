@@ -22,7 +22,8 @@ Ao abrir as três tabelas de staging (`stg_pedido`, `stg_loja`, `stg_loja_praca`
 
 **Grafias inconsistentes**
 - `CategoriaProduto`: **18 grafias distintas** (considerando a collation do MySQL, que ignora acento e maiúscula/minúscula). Ex.: "Racao", "RACAO", "Ração", "RAÇÃO" e "Rac." representam a mesma categoria escritas de formas diferentes — por isso a Tarefa 3 monta uma `dim_categoria` para padronizar isso em 7 categorias.
-- `Loja-Nome`: **128 grafias distintas**, incluindo variações de digitação, apelidos e abreviações da mesma loja, além do sufixo "/SC" e espaços duplos em alguns nomes.
+
+- `Loja-Nome`: **50 grafias distintas** (no MySQL, que ignora acento e maiúscula/minúscula), incluindo variações de digitação, apelidos e abreviações da mesma loja, além do sufixo "/SC" e espaços duplos em alguns nomes.
 
 **Dados faltantes**
 - **1.575 pedidos (~39%)** vieram sem `Cod Loja` preenchido.
@@ -234,21 +235,31 @@ parte desses pedidos tenha ocorrido quando ela estava numa faixa inferior
 
 ![Resultado da P5c - itens por mil habitantes e tempo de entrega](assets/pergunta05_c.png)
 
-**Recomendação final**
+## Conclusões e Insights
 
-Cidades pequenas e médias (10 a 25 mil habitantes) mostram a maior demanda
-reprimida por item vendido por habitante — são o perfil mais promissor para
-uma próxima loja. Mas essa recomendação vem com uma condição: a rede precisa
-resolver antes o gargalo logístico identificado na P1 (nota fiscal → despacho,
-que chega a 8,5 dias em lojas Pequenas), sob risco de repetir nessa nova loja
-os tempos de entrega de 14+ dias observados hoje nas cidades desse porte.
+Os cinco achados se conectam: o gargalo logístico da P1 (nota fiscal →
+despacho, pior em lojas Pequenas) explica por que as cidades pequenas que
+lideram a demanda por habitante na P5(a) também têm os piores tempos de
+entrega — ou seja, a rede tem apetite de crescimento nesses lugares, mas
+está estruturalmente despreparada pra atender bem esse crescimento hoje.
 
-O que os dados **não permitem afirmar**: (1) se o faturamento por faixa de
-franquia realmente reflete o desempenho de cada faixa ao longo do tempo, já
-que o cadastro só tem a foto de hoje; (2) qual será o tempo real de entrega
-das 1.953 entregas ainda em aberto — quase metade da base está incompleta
-nesse quesito; e (3) uma relação de causa entre desconto e ticket médio (P3) —
-apenas a correlação foi observada.
+Isso muda a leitura da recomendação de expansão: cidades pequenas e médias
+(10 a 25 mil habitantes) são o perfil de maior demanda reprimida, mas abrir
+uma loja nova nesse perfil **sem antes resolver o gargalo de despacho**
+corre o risco de nascer já repetindo os piores tempos de entrega da rede.
+
+Vale somar dois riscos de concentração à decisão: o negócio depende de uma
+única categoria (Ração = 60% do faturamento, P2), e o rateio por praça mostra
+que a eficiência varia muito mesmo dentro do mesmo porte de mercado (Vale do
+Itajaí x Foz do Itajaí, P4) — sugerindo que fatores locais de operação, não
+só o tamanho da cidade, decidem o resultado.
+
+**Limitações que valem pra análise inteira:** os dados cobrem só 7 meses
+(set/2023 a mar/2024); quase metade dos pedidos (1.953) não tinha entrega
+concluída na extração, então os tempos médios de entrega tendem a subestimar
+o tempo real; o faturamento por faixa de franquia reflete o cadastro atual,
+não o histórico da loja (P5b); e a relação entre desconto e ticket médio
+(P3) é uma correlação, não uma causa comprovada.
 
 ## Diagrama do modelo
 
