@@ -21,6 +21,7 @@ O arquivo `00-conferencia.sql` não faz parte da entrega: é uma ferramenta de a
 Ao abrir as três tabelas de staging (`stg_pedido`, `stg_loja`, `stg_loja_praca`), encontrei os seguintes problemas de qualidade de dados:
 
 **Grafias inconsistentes**
+
 - `CategoriaProduto`: **18 grafias distintas** (considerando a collation do MySQL, que ignora acento e maiúscula/minúscula). Ex.: "Racao", "RACAO", "Ração", "RAÇÃO" e "Rac." representam a mesma categoria escritas de formas diferentes — por isso a Tarefa 3 monta uma `dim_categoria` para padronizar isso em 7 categorias.
 
 - `Loja-Nome`: **50 grafias distintas** (no MySQL, que ignora acento e maiúscula/minúscula), incluindo variações de digitação, apelidos e abreviações da mesma loja, além do sufixo "/SC" e espaços duplos em alguns nomes.
@@ -30,6 +31,7 @@ Ao abrir as três tabelas de staging (`stg_pedido`, `stg_loja`, `stg_loja_praca`
 - **3 pedidos** vieram sem `Loja-Nome` — esses vão para a linha -1 ("Não Informado") da `dim_loja`.
 
 **Marcos do processo em branco** (etapas do fluxo de entrega ainda não cumpridas na data de extração dos dados):
+
 - `Dt Separacao Estoque`: **1.077** em branco
 - `DtNotaFiscal`: **1.338** em branco
 - `Dt_Despacho_Transportadora`: **1.665** em branco
@@ -267,4 +269,4 @@ não o histórico da loja (P5b); e a relação entre desconto e ticket médio
 
 ## Vídeo
 
-_[a preencher: link do vídeo no Google Drive]_
+_[https://drive.google.com/file/d/1M5VXnpUkLSrkZdpYZcXIhbWldniqxwe6/view?usp=sharing]_
